@@ -1,7 +1,7 @@
 from primePy import primes
 import numpy as np
 
-with open("input.txt", "r") as file:
+with open("./input.txt", "r") as file:
     for line in file:
         puzzle_input = line.strip()
 
@@ -22,19 +22,22 @@ def invalid_pattern(pattern, sum_invid):
     length = len(str(pattern))
     prime_factors = np.unique(primes.factors(length))
     # print(prime_factors)
-    if len(set(str(pattern))) == 1:
-        # print("number is repeating patterns")
-        sum_invid += pattern
-    else:
-        for factor in prime_factors:
-            if length != factor:
-                if len(set(list(chunkstring(str(pattern), factor)))) == 1:
-                    # print("invalid pattern found!")
-                    sum_invid += pattern
+    if (
+        length != 1
+    ):  # whoops! was getting the wrong answer because a single number was counting as repeated
+        if len(set(str(pattern))) == 1:
+            # print("number is repeating patterns")
+            sum_invid.append(pattern)
+        else:
+            for factor in prime_factors:
+                if length != factor:
+                    if len(set(list(chunkstring(str(pattern), factor)))) == 1:
+                        # print("invalid pattern found!")
+                        sum_invid.append(pattern)
     return sum_invid
 
 
-sum_invid = 0
+sum_invid = []
 for row in range(len(puzzle_list)):
     item = puzzle_list[row]
     # print(item)
@@ -48,3 +51,5 @@ for row in range(len(puzzle_list)):
         # print(f"sum_invid is {sum_invid}")
 
 print(sum_invid)
+print(np.sum(sum_invid))
+print(np.sum(np.unique(sum_invid)))
